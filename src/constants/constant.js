@@ -19,7 +19,7 @@ export const feedHeaderData = [
   },
 ];
 
-
+// calculate time since
 const intervals = [
     { label: 'year', seconds: 31536000 },
     { label: 'month', seconds: 2592000 },
@@ -35,4 +35,16 @@ const intervals = [
     const interval = intervals.find(i => i.seconds < seconds);
     const count = Math.floor(seconds / interval.seconds);
     return `${count} ${interval.label}${count !== 1 ? 's' : ''} ago`;
+  }
+
+  // timeline chart axis for news
+  export const axisOptions={
+    hAxis: {
+      title: 'ID',
+    },
+    vAxis: {
+      title: 'Votes',
+    },
+    legend: {position: 'none'},
+    pointsVisible: true	
   }

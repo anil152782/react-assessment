@@ -4,6 +4,7 @@ import FeedHeader from "../../components/feed/Header";
 import upvoteIcon from "../../assests/images/grayarrow.gif";
 import { fetchFeedsData } from "../../actions/feed";
 import {timeSince} from '../../constants/constant';
+import TimeLineChart from '../chart/Timeline';
 const FeedContainer = () => {
   const [loader, setLoader] = useState(false);
   const [feedsData, setFeedsData] = useState([]);
@@ -43,7 +44,7 @@ const FeedContainer = () => {
     setFeedsData(updatedFeedData);
   };
 
-  //fetch feeds
+  //fetch feeds from api
   const fetchFeedsHandler = () => {
     setLoader(true);
     fetchFeedsData(selectedPage)
@@ -95,8 +96,9 @@ const FeedContainer = () => {
 
   return (
     <React.Fragment>
+    {!loader && feedsData && <TimeLineChart chartData={feedsData}/>}
       {loader && <div data-testid="loader" className="loader"></div>}
-      {!loader && <table>
+      {!loader && feedsData && <table>
         <FeedHeader/>
         <tbody className={styles.feedListing}>
           {feedsData.length > 0 &&
