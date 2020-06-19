@@ -1,12 +1,12 @@
 import React from 'react';
-import './App.css';
-
-function App() {
+import "./App.css";
+import AppRouting from "./AppRouting";
+const App = () => {
   return (
-    <div className="App">
-      React -ass
-    </div>
-  );
+    <main>
+    <AppRouting />
+  </main>
+  )
 }
 
-export default App;
+export default  App;

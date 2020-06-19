@@ -1,0 +1,15 @@
+.feedHeader{
+    background: #ff6600;
+   }
+
+.feedHeader th{
+    padding: 4px;
+    color: #fff;
+    vertical-align: bottom;
+}
+.feedHeader th:nth-child(2){
+ width: 50px;
+}
+.feedHeader th:nth-child(4) {
+	text-align: left;
+}

@@ -1,0 +1,74 @@
+
+table {
+	text-align: center;
+}
+
+.feedListing {
+	padding: 5px 0 10px;
+}
+
+.feedListing td:nth-child(4) {
+	text-align: left;
+	padding: 5px 0 10px;
+}
+.feedListing tr:nth-child(2n+1) {
+	background-color: #f6f6ef;
+}
+.feedListing td{
+	color: #828282;
+	line-height: 1.6;
+	font-size: 9px;
+}
+
+.feedListing button {
+	border: none;
+	background: none;
+}
+
+
+.upvoteCount.upvoted {
+	color: #ff6600;
+}
+
+.upvoteIcon {
+	margin-right: 4px;
+	margin-left: 2px;
+	cursor: pointer;
+	width: 10px;
+	height: 10px;
+}
+
+.hideFeed,
+.feedTitle,
+.feedAuthor {
+	color: #000000;
+	margin: 0 2px;
+}
+
+.feedCreatedTime,
+.feedAuthor {
+	white-space: nowrap;
+}
+.feedCreatedTime{
+	margin-left: 2px;
+}
+
+.hideFeed:hover {
+	text-decoration: underline;
+}
+
+.feedDomain {
+	word-break: break-word;
+}
+
+.feedTitle {
+	font-size: 12px;
+	color: #000000;
+}
+
+
+
+.feedListing li.paginationContainer {
+	color: #ff6600;
+	font-size: 12px;
+}
