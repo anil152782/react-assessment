@@ -15,7 +15,7 @@ table {
 	background-color: #f6f6ef;
 }
 .feedListing td{
-	color: #828282;
+	color: #403d3d;
 	line-height: 1.6;
 	font-size: 9px;
 }
@@ -64,11 +64,4 @@ table {
 .feedTitle {
 	font-size: 12px;
 	color: #000000;
-}
-
-
-
-.feedListing li.paginationContainer {
-	color: #ff6600;
-	font-size: 12px;
 }

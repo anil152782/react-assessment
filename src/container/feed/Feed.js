@@ -96,9 +96,11 @@ const FeedContainer = () => {
 
   return (
     <React.Fragment>
-    {!loader && feedsData && <TimeLineChart chartData={feedsData}/>}
+    {!loader && feedsData.length ===0 && <p>Please clear local storage and reload!</p>}
+    
       {loader && <div data-testid="loader" className="loader"></div>}
-      {!loader && feedsData && <table>
+      {!loader && feedsData.length >0 && <React.Fragment>
+      <table>
         <FeedHeader/>
         <tbody className={styles.feedListing}>
           {feedsData.length > 0 &&
@@ -154,7 +156,9 @@ const FeedContainer = () => {
               </tr>
             ))}
         </tbody>
-      </table>}
+      </table>
+      <TimeLineChart chartData={feedsData}/>
+     </React.Fragment>}
     </React.Fragment>
   );
 };
