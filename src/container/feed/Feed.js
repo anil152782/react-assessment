@@ -8,11 +8,7 @@ import TimeLineChart from '../chart/Timeline';
 const FeedContainer = () => {
   const [loader, setLoader] = useState(false);
   const [feedsData, setFeedsData] = useState([]);
-  const [selectedPage, setSelectedPage] = useState(0);
-  // load more feeds
-  const loadMoreFeeds = () => {
-    setSelectedPage((prevState) => prevState + 1);
-  };
+  const [selectedPage,] = useState(0);
 
   // hide feed
   const hideFeed = (selectedFeed) => {
@@ -45,7 +41,52 @@ const FeedContainer = () => {
   };
 
   //fetch feeds from api
-  const fetchFeedsHandler = () => {
+  // const fetchFeedsHandler = () => {
+  //   setLoader(true);
+  //   fetchFeedsData(selectedPage)
+  //     .then((res) => {
+  //       let hiddenFeeds = JSON.parse(localStorage.getItem("hiddenFeeds"));
+  //       let upvotedFeeds = JSON.parse(localStorage.getItem("upvotedFeeds"));
+  //       let filterdRes = res.hits;
+  //       if (hiddenFeeds.length > 0 && filterdRes.length > 0) {
+  //         filterdRes = res.hits.filter(function (e) {
+  //           return this.indexOf(e.objectID) < 0;
+  //         }, hiddenFeeds);
+  //       }
+  //       if (upvotedFeeds.length > 0 && filterdRes.length > 0) {
+  //         filterdRes = filterdRes.map(function (feed) {
+  //           return {
+  //             ...feed,
+  //             upvoted: this.indexOf(feed.objectID) < 0 ? false : true,
+  //           };
+  //         }, upvotedFeeds);
+  //       }
+  //       setLoader(false);
+  //       setFeedsData(filterdRes);
+  //     })
+  //     .catch((err) => {
+  //       setLoader(false);
+  //       setFeedsData([]);
+  //     });
+  // };
+
+  //get domain name
+  const getDomainName = (url) => {
+    return url ? `(${new URL(url).hostname})` : "";
+  };
+
+  // on did mount
+  useEffect(() => {
+    let storedHiddenItems = JSON.parse(localStorage.getItem("hiddenFeeds"));
+    let storedUpvoteItems = JSON.parse(localStorage.getItem("upvotedFeeds"));
+    let hiddenFeeds = storedHiddenItems ? storedHiddenItems : [];
+    let upvotedFeeds = storedUpvoteItems ? storedUpvoteItems : [];
+    localStorage.setItem("hiddenFeeds", JSON.stringify(hiddenFeeds));
+    localStorage.setItem("upvotedFeeds", JSON.stringify(upvotedFeeds));
+  }, []);
+
+  // get feeds data
+  useEffect(() => {
     setLoader(true);
     fetchFeedsData(selectedPage)
       .then((res) => {
@@ -72,26 +113,6 @@ const FeedContainer = () => {
         setLoader(false);
         setFeedsData([]);
       });
-  };
-
-  //get domain name
-  const getDomainName = (url) => {
-    return url ? `(${new URL(url).hostname})` : "";
-  };
-
-  // on did mount
-  useEffect(() => {
-    let storedHiddenItems = JSON.parse(localStorage.getItem("hiddenFeeds"));
-    let storedUpvoteItems = JSON.parse(localStorage.getItem("upvotedFeeds"));
-    let hiddenFeeds = storedHiddenItems ? storedHiddenItems : [];
-    let upvotedFeeds = storedUpvoteItems ? storedUpvoteItems : [];
-    localStorage.setItem("hiddenFeeds", JSON.stringify(hiddenFeeds));
-    localStorage.setItem("upvotedFeeds", JSON.stringify(upvotedFeeds));
-  }, []);
-
-  // get feeds data
-  useEffect(() => {
-    fetchFeedsHandler();
   }, [selectedPage]);
 
   return (
