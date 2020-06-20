@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import FeedHeader from "../../components/feed/Header";
-import FeedsBody from "../../components/feed/FeedBody"
+import FeedsBody from "../../components/feed/FeedBody";
 import { fetchFeedsData } from "../../actions/feed";
-import {pagination} from '../../constants/constant';
-import TimeLineChart from '../chart/Timeline';
-import Pagination from '../../components/pagination/Pagination';
+import { pagination } from "../../constants/constant";
+import TimeLineChart from "../chart/Timeline";
+import Pagination from "../../components/pagination/Pagination";
 const FeedContainer = () => {
   const [loader, setLoader] = useState(false);
   const [feedsData, setFeedsData] = useState([]);
-  const [selectedPage,setSelectedPage] = useState(0);
+  const [totalPagecount, setTotalPageCount] = useState(null);
+  const [selectedPage, setSelectedPage] = useState(0);
 
   // hide feed
   const hideFeed = (selectedFeed) => {
@@ -22,17 +23,14 @@ const FeedContainer = () => {
     setFeedsData(updatedFeedData);
   };
 
-
   // onPagination
-  const onPagination=(key)=>{
-    if(key === pagination.next.key){
-      setSelectedPage(selectedPage +1)
+  const onPagination = (key) => {
+    if (key === pagination.next.key) {
+      setSelectedPage(selectedPage + 1);
+    } else {
+      setSelectedPage((selectedPage) => selectedPage - 1);
     }
-    else{
-      setSelectedPage((selectedPage)=>selectedPage === 0 ? 0 : selectedPage -1)
-    }
-  }
-
+  };
 
   // upvote feed
   const upvote = (selectedFeed) => {
@@ -52,7 +50,6 @@ const FeedContainer = () => {
     setFeedsData(updatedFeedData);
   };
 
- 
   // on did mount
   useEffect(() => {
     let storedHiddenItems = JSON.parse(localStorage.getItem("hiddenFeeds"));
@@ -86,26 +83,36 @@ const FeedContainer = () => {
         }
         setLoader(false);
         setFeedsData(filterdRes);
+        setTotalPageCount(res.nbPages)
       })
       .catch((err) => {
         setLoader(false);
         setFeedsData([]);
+        setTotalPageCount(null)
       });
   }, [selectedPage]);
 
   return (
     <React.Fragment>
-    {!loader && feedsData.length ===0 && <p>Please clear local storage and reload!</p>}
-    
+      {!loader && feedsData.length === 0 && (
+        <p data-testid="noData">Please clear local storage and reload!</p>
+      )}
+
       {loader && <div data-testid="loader" className="loader"></div>}
-      {!loader && feedsData.length >0 && <React.Fragment>
-      <table>
-        <FeedHeader/>
-        {feedsData.length > 0 && <FeedsBody upvote={upvote} hideFeed={hideFeed} feedsData={feedsData} />}
-      </table>
-      <Pagination pagination={onPagination}/>
-      <TimeLineChart chartData={feedsData}/>
-     </React.Fragment>}
+      {!loader && feedsData.length > 0 && (
+        <React.Fragment>
+          <table>
+            <FeedHeader />
+              <FeedsBody
+                upvote={upvote}
+                hideFeed={hideFeed}
+                feedsData={feedsData}
+              />
+          </table>
+          <Pagination prebtnHidden={selectedPage===0} nextbtnHidden={selectedPage===(totalPagecount -1)} paginationEvent={onPagination} />
+          <TimeLineChart chartData={feedsData} />
+        </React.Fragment>
+      )}
     </React.Fragment>
   );
 };

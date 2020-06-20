@@ -1,15 +1,14 @@
 import React from "react";
 import styles from "./FeedBody.module.css";
 import upvoteIcon from "../../assests/images/grayarrow.gif";
-import {timeSince} from '../../constants/constant';
-export default function FeedsBody({feedsData, upvote, hideFeed}) {
-     //get domain name
+import { timeSince } from "../../constants/constant";
+export default function FeedsBody({ feedsData, upvote, hideFeed }) {
+  //get domain name
   const getDomainName = (url) => {
     return url ? `(${new URL(url).hostname})` : "";
   };
   return (
-    <tbody className={styles.feedListing}>
-  
+    <tbody className={styles.feedListing} data-testid="feedItems">
       {feedsData.map((feed, index) => (
         <tr key={feed.objectID}>
           <td>
@@ -32,12 +31,12 @@ export default function FeedsBody({feedsData, upvote, hideFeed}) {
               : 0}
           </td>
           <td>
-          <button  onClick={() => upvote(feed)}>
-            <img
-              className={styles.upvoteIcon}
-              src={upvoteIcon}
-              alt="upvote"
-            />
+            <button data-testid="upvoteFeed" onClick={() => upvote(feed)}>
+              <img
+                className={styles.upvoteIcon}
+                src={upvoteIcon}
+                alt="upvote"
+              />
             </button>
           </td>
           <td>
@@ -50,9 +49,9 @@ export default function FeedsBody({feedsData, upvote, hideFeed}) {
             by
             <span className={styles.feedAuthor}> {feed.author}</span>
             <span className={styles.feedCreatedTime}>
-            {timeSince(feed.created_at)}
-          </span>
-            <button
+              {timeSince(feed.created_at)}
+            </span>
+            <button data-testid="hideFeed"
               onClick={() => hideFeed(feed)}
               className={["cursorPointer", styles.hideFeed].join(" ")}
             >
@@ -61,6 +60,6 @@ export default function FeedsBody({feedsData, upvote, hideFeed}) {
           </td>
         </tr>
       ))}
-  </tbody>
+    </tbody>
   );
 }
