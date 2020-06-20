@@ -48,3 +48,15 @@ const intervals = [
     legend: {position: 'none'},
     pointsVisible: true	
   }
+
+  //pagination btn keys
+  export const pagination ={
+    previous:{
+      key:'pre',
+      value:"Previous"
+    },
+    next:{
+      key:'next',
+      value:"Next"
+    }
+  }

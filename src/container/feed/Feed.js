@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import styles from "./Feed.module.css";
 import FeedHeader from "../../components/feed/Header";
-import upvoteIcon from "../../assests/images/grayarrow.gif";
+import FeedsBody from "../../components/feed/FeedBody"
 import { fetchFeedsData } from "../../actions/feed";
-import {timeSince} from '../../constants/constant';
+import {pagination} from '../../constants/constant';
 import TimeLineChart from '../chart/Timeline';
+import Pagination from '../../components/pagination/Pagination';
 const FeedContainer = () => {
   const [loader, setLoader] = useState(false);
   const [feedsData, setFeedsData] = useState([]);
-  const [selectedPage,] = useState(0);
+  const [selectedPage,setSelectedPage] = useState(0);
 
   // hide feed
   const hideFeed = (selectedFeed) => {
@@ -21,6 +21,18 @@ const FeedContainer = () => {
     );
     setFeedsData(updatedFeedData);
   };
+
+
+  // onPagination
+  const onPagination=(key)=>{
+    if(key === pagination.next.key){
+      setSelectedPage(selectedPage +1)
+    }
+    else{
+      setSelectedPage((selectedPage)=>selectedPage === 0 ? 0 : selectedPage -1)
+    }
+  }
+
 
   // upvote feed
   const upvote = (selectedFeed) => {
@@ -40,41 +52,7 @@ const FeedContainer = () => {
     setFeedsData(updatedFeedData);
   };
 
-  //fetch feeds from api
-  // const fetchFeedsHandler = () => {
-  //   setLoader(true);
-  //   fetchFeedsData(selectedPage)
-  //     .then((res) => {
-  //       let hiddenFeeds = JSON.parse(localStorage.getItem("hiddenFeeds"));
-  //       let upvotedFeeds = JSON.parse(localStorage.getItem("upvotedFeeds"));
-  //       let filterdRes = res.hits;
-  //       if (hiddenFeeds.length > 0 && filterdRes.length > 0) {
-  //         filterdRes = res.hits.filter(function (e) {
-  //           return this.indexOf(e.objectID) < 0;
-  //         }, hiddenFeeds);
-  //       }
-  //       if (upvotedFeeds.length > 0 && filterdRes.length > 0) {
-  //         filterdRes = filterdRes.map(function (feed) {
-  //           return {
-  //             ...feed,
-  //             upvoted: this.indexOf(feed.objectID) < 0 ? false : true,
-  //           };
-  //         }, upvotedFeeds);
-  //       }
-  //       setLoader(false);
-  //       setFeedsData(filterdRes);
-  //     })
-  //     .catch((err) => {
-  //       setLoader(false);
-  //       setFeedsData([]);
-  //     });
-  // };
-
-  //get domain name
-  const getDomainName = (url) => {
-    return url ? `(${new URL(url).hostname})` : "";
-  };
-
+ 
   // on did mount
   useEffect(() => {
     let storedHiddenItems = JSON.parse(localStorage.getItem("hiddenFeeds"));
@@ -85,7 +63,7 @@ const FeedContainer = () => {
     localStorage.setItem("upvotedFeeds", JSON.stringify(upvotedFeeds));
   }, []);
 
-  // get feeds data
+  // get feeds data on mount and pagination
   useEffect(() => {
     setLoader(true);
     fetchFeedsData(selectedPage)
@@ -123,61 +101,9 @@ const FeedContainer = () => {
       {!loader && feedsData.length >0 && <React.Fragment>
       <table>
         <FeedHeader/>
-        <tbody className={styles.feedListing}>
-          {feedsData.length > 0 &&
-            feedsData.map((feed, index) => (
-              <tr key={feed.objectID}>
-                <td>
-                  <span className={styles.comentCount}>
-                    {feed.num_comments ? feed.num_comments : 0}
-                  </span>
-                </td>
-                <td
-                  className={[
-                    styles.upvoteCount,
-                    feed.upvoted ? styles.upvoted : "",
-                  ].join(" ")}
-                >
-                  {feed.points
-                    ? feed.upvoted
-                      ? feed.points + 1
-                      : feed.points
-                    : feed.upvoted
-                    ? 1
-                    : 0}
-                </td>
-                <td>
-                <button  onClick={() => upvote(feed)}>
-                  <img
-                    className={styles.upvoteIcon}
-                    src={upvoteIcon}
-                    alt="upvote"
-                  />
-                  </button>
-                </td>
-                <td>
-                  {" "}
-                  <span className={styles.feedTitle}> {feed.title}</span>
-                  <span className={styles.feedDomain}>
-                    {" "}
-                    {getDomainName(feed.url)}{" "}
-                  </span>
-                  by
-                  <span className={styles.feedAuthor}> {feed.author}</span>
-                  <span className={styles.feedCreatedTime}>
-                  {timeSince(feed.created_at)}
-                </span>
-                  <button
-                    onClick={() => hideFeed(feed)}
-                    className={["cursorPointer", styles.hideFeed].join(" ")}
-                  >
-                    [hide]
-                  </button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
+        {feedsData.length > 0 && <FeedsBody upvote={upvote} hideFeed={hideFeed} feedsData={feedsData} />}
       </table>
+      <Pagination pagination={onPagination}/>
       <TimeLineChart chartData={feedsData}/>
      </React.Fragment>}
     </React.Fragment>

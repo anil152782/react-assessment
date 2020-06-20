@@ -1,0 +1,15 @@
+.pagination {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.pagination button{
+background: none;
+border: none;
+color: #ff6600;
+cursor: pointer;
+}
+
+.pagination button:hover{
+    text-decoration: underline;
+}
