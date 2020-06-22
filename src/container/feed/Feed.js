@@ -101,6 +101,7 @@ const FeedContainer = () => {
       {loader && <div data-testid="loader" className="loader"></div>}
       {!loader && feedsData.length > 0 && (
         <React.Fragment>
+        <div className="table-responsive">
           <table>
             <FeedHeader />
               <FeedsBody
@@ -110,6 +111,8 @@ const FeedContainer = () => {
               />
           </table>
           <Pagination prebtnHidden={selectedPage===0} nextbtnHidden={selectedPage===(totalPagecount -1)} paginationEvent={onPagination} />
+          </div>
+        
           <TimeLineChart chartData={feedsData} />
         </React.Fragment>
       )}
