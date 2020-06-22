@@ -5,11 +5,13 @@ import { fetchFeedsData } from "../../actions/feed";
 import { pagination } from "../../constants/constant";
 import TimeLineChart from "../chart/Timeline";
 import Pagination from "../../components/pagination/Pagination";
-const FeedContainer = () => {
+import loadData from '../../helpers/loadData';
+const FeedContainer = (props) => {
   const [loader, setLoader] = useState(false);
   const [feedsData, setFeedsData] = useState([]);
   const [totalPagecount, setTotalPageCount] = useState(null);
   const [selectedPage, setSelectedPage] = useState(0);
+
 
   // hide feed
   const hideFeed = (selectedFeed) => {
@@ -63,7 +65,7 @@ const FeedContainer = () => {
   // get feeds data on mount and pagination
   useEffect(() => {
     setLoader(true);
-    fetchFeedsData(selectedPage)
+    loadData(selectedPage)
       .then((res) => {
         let hiddenFeeds = JSON.parse(localStorage.getItem("hiddenFeeds"));
         let upvotedFeeds = JSON.parse(localStorage.getItem("upvotedFeeds"));
@@ -91,6 +93,10 @@ const FeedContainer = () => {
         setTotalPageCount(null)
       });
   }, [selectedPage]);
+
+
+console.log("prpops", props)
+
 
   return (
     <React.Fragment>
